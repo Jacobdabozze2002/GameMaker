@@ -10,17 +10,34 @@ function GUI_BaseClass() constructor
 		
 	alpha = 1;
 	alpha_highlighted = 1;
+	
+	color_Border = make_color_rgb(255,255,255);
+	color_Background = make_color_rgb(0,0,0);
+	color_Border_Highlighted = make_color_rgb(255,255,255);
+	color_Background_Highlighted = make_color_rgb(0,0,0);
 		
 		
 	function mouseOver()
 	{
 		var gui_width = window_get_width();
 		var gui_height = window_get_height();
+		var _mouse_x = window_mouse_get_x();
+		var _mouse_y = window_mouse_get_y();
+		var _width = gui_width *scale_width;
+		var _height = gui_height *scale_height;
+		var _x = gui_width *scale_x;
+		var _y = gui_height *scale_y;
 		
 		if (isRectangularShape)
-			return point_in_rectangle(window_mouse_get_x(), window_mouse_get_y(), gui_width *scale_x, gui_height *scale_y, gui_width *scale_x + gui_width *scale_width, gui_height *scale_y + gui_height *scale_height);
+			return point_in_rectangle(_mouse_x, _mouse_y, _x, _y, _x + _width, _y + _height);
 		else
-			return true;
+		{	
+			var _h = _x + _width /2;
+			var _k = _y + _height /2;
+			
+			return ((_mouse_x - _h)*(_mouse_x - _h)) / (_width/2*_width/2) + ((_mouse_y - _k)*(_mouse_y - _k)) / (_height/2*_height/2) <= 1;
+		}
+		
 	}
 			
 	function setCenter(_scale_width = scale_width, _scale_height = scale_height) 
@@ -104,10 +121,6 @@ function GUI_BaseClass() constructor
 
 function Rectangle() : GUI_BaseClass() constructor
 {
-	color_Border = make_color_rgb(255,255,255);
-	color_Background = make_color_rgb(0,0,0);
-	color_Border_Highlighted = make_color_rgb(255,255,255);
-	color_Background_Highlighted = make_color_rgb(0,0,0);
 	insets = 0;
 	
 	function draw()
@@ -129,10 +142,6 @@ function Rectangle() : GUI_BaseClass() constructor
 
 function Ellipse() : GUI_BaseClass() constructor
 {
-	color_Border = make_color_rgb(255,255,255);
-	color_Background = make_color_rgb(0,0,0);
-	color_Border_Highlighted = make_color_rgb(255,255,255);
-	color_Background_Highlighted = make_color_rgb(0,0,0);
 	isRectangularShape = false;
 	
 	function draw()
