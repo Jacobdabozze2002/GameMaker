@@ -91,7 +91,7 @@ function Rectangle() : GUI_BaseClass() constructor
 {
 	color_Border = make_color_rgb(255,255,255);
 	color_Background = make_color_rgb(0,0,0);
-	
+	insets = 0;
 	
 	function draw()
 	{
@@ -100,11 +100,9 @@ function Rectangle() : GUI_BaseClass() constructor
 		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
 				
 		draw_set_color(color_Background);
-		draw_roundrect_ext(0,0, gui_width, gui_height, 10, 10, false);
+		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, false);
 		
 		draw_set_color(color_Border);
-		draw_roundrect_ext(0,0, gui_width, gui_height, 10, 10, true);
+		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, true);
 	}
 }
-
-
