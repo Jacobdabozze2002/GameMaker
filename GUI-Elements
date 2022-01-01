@@ -4,18 +4,37 @@ function GUI_BaseClass() constructor
 	scale_height = .5;
 	scale_x = .25;
 	scale_y = .25;
+	scale_border = .001;
 	
 	parent = undefined;	
 	isRectangularShape = true;
 		
 	alpha = 1;
 	alpha_highlighted = 1;
-	
-	color_Border = make_color_rgb(255,255,255);
-	color_Background = make_color_rgb(0,0,0);
-	color_Border_Highlighted = make_color_rgb(255,255,255);
-	color_Background_Highlighted = make_color_rgb(0,0,0);
 		
+	color_Border = make_color_rgb(255,255,255);
+	color_Border_Highlighted = make_color_rgb(255,255,255);
+	
+	color_Background = make_color_rgb(0,0,0);
+	color_Background_Highlighted = make_color_rgb(0,0,0);
+	
+	function allColorBorder(_color)
+	{
+		color_Border = _color;
+		color_Border_Highlighted = _color;
+	}
+		
+	function allColorBackground(_color)
+	{
+		color_Background = _color;
+		color_Background_Highlighted = _color;
+	}
+		
+	function allAlpha(_alpha)
+	{
+		alpha = _alpha;
+		alpha_highlighted = _alpha;
+	}
 		
 	function mouseOver()
 	{
@@ -130,8 +149,8 @@ function Rectangle() : GUI_BaseClass() constructor
 		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
 								
 		var isHighlighted = mouseOver();
-		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);						
-								
+		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);	
+				
 		draw_set_color(!isHighlighted ? color_Background : color_Background_Highlighted);
 		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, false);
 		
@@ -162,19 +181,14 @@ function Ellipse() : GUI_BaseClass() constructor
 	
 	function makeCircle(_scale_radius = .25)
 	{
-		var gui_width = window_get_width();
-		var gui_height = window_get_height();
-		var ratio = gui_width / gui_height;
-				
-		if (gui_width <= gui_height)		
-		{
-			scale_width = is_undefined(parent) ? _scale_radius : parent.scale_width * _scale_radius;
-			scale_height = is_undefined(parent) ? _scale_radius *ratio : parent.scale_width * _scale_radius * ratio;
-		} 
+		var ratio;
+		
+		if (is_undefined(parent))
+			ratio = window_get_width() / window_get_height();
 		else
-		{
-			scale_width = is_undefined(parent) ? _scale_radius / ratio : parent.scale_width * _scale_radius / ratio;
-			scale_height = is_undefined(parent) ? _scale_radius : parent.scale_width *_scale_radius;		
-		}
+			ratio = (window_get_width() *parent.scale_width) / (window_get_height() * parent.scale_height);
+		
+		scale_width = ratio >= 1 ? _scale_radius / ratio : _scale_radius;
+		scale_height = ratio >= 1 ? _scale_radius : _scale_radius * ratio;
 	}
 }
