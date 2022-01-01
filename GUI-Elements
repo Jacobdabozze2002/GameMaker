@@ -1,0 +1,110 @@
+function GUI_BaseClass() constructor
+{
+	scale_width = .5;
+	scale_height = .5;
+	scale_x = .25;
+	scale_y = .25;
+	
+	parent = undefined;
+			
+	function setCenter(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? (1 - scale_width) / 2 : parent.scale_x + parent.scale_width / 2 - scale_width / 2;
+		scale_y = is_undefined(parent) ? (1 - scale_height) / 2 : parent.scale_y + parent.scale_height / 2 - scale_height / 2;
+	}
+	
+	function setTopLeft(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? 0 : parent.scale_x;
+		scale_y = is_undefined(parent) ? 0 : parent.scale_y;
+	}
+	
+	function setTopRight(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? 1 - scale_width : parent.scale_x + parent.scale_width - scale_width;
+		scale_y = is_undefined(parent) ? 0 : parent.scale_y;
+	}
+	
+	function setBottomLeft(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? 0 : parent.scale_x;
+		scale_y = is_undefined(parent) ? 1 - scale_height : parent.scale_y + parent.scale_height - scale_height;
+	}
+	
+	function setBottomRight(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? 1 - scale_width : parent.scale_x + parent.scale_width - scale_width;
+		scale_y = is_undefined(parent) ? 1 - scale_height : parent.scale_y + parent.scale_height - scale_height;
+	}
+	
+	function setTopCenter(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? (1 - scale_width) / 2 : parent.scale_x + parent.scale_width / 2 - scale_width / 2;
+		scale_y = is_undefined(parent) ? 0 : parent.scale_y;
+	}
+	
+	function setBottomCenter(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? (1 - scale_width) / 2 : parent.scale_x + parent.scale_width / 2 - scale_width / 2;
+		scale_y = is_undefined(parent) ? 1 - scale_height : parent.scale_y + parent.scale_height - scale_height;
+	}
+	
+	function setLeftSideCenter(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ? 0 : parent.scale_x;
+		scale_y = is_undefined(parent) ? (1 - scale_height) / 2 : parent.scale_y + parent.scale_height / 2 - scale_height / 2;
+	}
+	
+	function setRightSideCenter(_scale_width = scale_width, _scale_height = scale_height) 
+	{
+		scale_width = is_undefined(parent) ? _scale_width : parent.scale_width * _scale_width;
+		scale_height = is_undefined(parent) ? _scale_height : parent.scale_height * _scale_height;
+		scale_x = is_undefined(parent) ?  1 - scale_width : parent.scale_x + parent.scale_width - scale_width;
+		scale_y = is_undefined(parent) ? (1 - scale_height) / 2 : parent.scale_y + parent.scale_height / 2 - scale_height / 2;
+	}
+	
+	function move(_scale_x = 0, _scale_y = 0)
+	{
+		scale_x += _scale_x;
+		scale_y += _scale_y;
+	}
+}	
+
+
+function Rectangle() : GUI_BaseClass() constructor
+{
+	color_Border = make_color_rgb(255,255,255);
+	color_Background = make_color_rgb(0,0,0);
+	
+	
+	function draw()
+	{
+		var gui_width = display_get_gui_width();
+		var gui_height = display_get_gui_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+				
+		draw_set_color(color_Background);
+		draw_roundrect_ext(0,0, gui_width, gui_height, 10, 10, false);
+		
+		draw_set_color(color_Border);
+		draw_roundrect_ext(0,0, gui_width, gui_height, 10, 10, true);
+	}
+}
+
+
