@@ -5,7 +5,19 @@ function GUI_BaseClass() constructor
 	scale_x = .25;
 	scale_y = .25;
 	
-	parent = undefined;
+	parent = undefined;	
+		
+	alpha = 1;
+	alpha_highlighted = 1;
+		
+		
+	function mouseOver()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		
+		return point_in_rectangle(window_mouse_get_x(), window_mouse_get_y(), gui_width *scale_x, gui_height *scale_y, gui_width *scale_x + gui_width *scale_width, gui_height *scale_y + gui_height *scale_height);
+	}
 			
 	function setCenter(_scale_width = scale_width, _scale_height = scale_height) 
 	{
@@ -91,18 +103,25 @@ function Rectangle() : GUI_BaseClass() constructor
 {
 	color_Border = make_color_rgb(255,255,255);
 	color_Background = make_color_rgb(0,0,0);
+	color_Border_Highlighted = make_color_rgb(255,255,255);
+	color_Background_Highlighted = make_color_rgb(0,0,0);
 	insets = 0;
 	
 	function draw()
 	{
-		var gui_width = display_get_gui_width();
-		var gui_height = display_get_gui_height();
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
 		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
-				
-		draw_set_color(color_Background);
+								
+		var isHighlighted = mouseOver();
+		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);						
+								
+		draw_set_color(!isHighlighted ? color_Background : color_Background_Highlighted);
 		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, false);
 		
-		draw_set_color(color_Border);
+		draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
 		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, true);
 	}
 }
+
+
