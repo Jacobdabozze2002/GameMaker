@@ -18,19 +18,19 @@ function GUI_BaseClass() constructor
 	color_Background = make_color_rgb(0,0,0);
 	color_Background_Highlighted = make_color_rgb(0,0,0);
 	
-	function allColorBorder(_color)
+	function setBothColorBorder(_color)
 	{
 		color_Border = _color;
 		color_Border_Highlighted = _color;
 	}
 		
-	function allColorBackground(_color)
+	function setBothColorBackground(_color)
 	{
 		color_Background = _color;
 		color_Background_Highlighted = _color;
 	}
 		
-	function allAlpha(_alpha)
+	function setBothAlpha(_alpha)
 	{
 		alpha = _alpha;
 		alpha_highlighted = _alpha;
