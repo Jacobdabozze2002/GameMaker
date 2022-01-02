@@ -251,8 +251,8 @@ function Label() : GUI_BaseClass() constructor
 		draw_set_valign(vertical_alignment);
 		draw_set_color(!isHighlighted ? color_Text : color_Text_Highlighted);
 
-		display_set_gui_maximise(1, 1);
-		draw_text_transformed(getTextX(gui_width), getTextY(gui_height), text, scale_text_width, scale_text_height, text_angle);
+		display_set_gui_size(surface_get_width(application_surface), surface_get_height(application_surface));
+		draw_text_transformed(getTextX(surface_get_width(application_surface)), getTextY(surface_get_height(application_surface)), text, scale_text_width, scale_text_height, text_angle);
 	}
 	
 	function scaleText(_factor = 1)
