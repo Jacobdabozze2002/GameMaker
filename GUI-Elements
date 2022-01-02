@@ -4,38 +4,13 @@ function GUI_BaseClass() constructor
 	scale_height = .5;
 	scale_x = .25;
 	scale_y = .25;
-	scale_border = .001;
 	
 	parent = undefined;	
 	isRectangularShape = true;
 		
 	alpha = 1;
 	alpha_highlighted = 1;
-		
-	color_Border = make_color_rgb(255,255,255);
-	color_Border_Highlighted = make_color_rgb(255,255,255);
 	
-	color_Background = make_color_rgb(0,0,0);
-	color_Background_Highlighted = make_color_rgb(0,0,0);
-	
-	function setBothColorBorder(_color = make_color_rgb(0,0,0))
-	{
-		color_Border = _color;
-		color_Border_Highlighted = _color;
-	}
-		
-	function setBothColorBackground(_color = make_color_rgb(0,0,0))
-	{
-		color_Background = _color;
-		color_Background_Highlighted = _color;
-	}
-		
-	function setBothAlpha(_alpha = 1)
-	{
-		alpha = _alpha;
-		alpha_highlighted = _alpha;
-	}
-		
 	function mouseOver()
 	{
 		var gui_width = window_get_width();
@@ -136,14 +111,43 @@ function GUI_BaseClass() constructor
 		scale_x += _scale_x;
 		scale_y += _scale_y;
 	}
-	
-	var function getBorderFactor()
-	{
-		return window_get_width() * scale_border / 2;
-	}
 }	
 
-function Rectangle() : GUI_BaseClass() constructor
+function Interactives() : GUI_BaseClass() constructor
+{
+	scale_border = .001;
+		
+	color_Border = make_color_rgb(255,255,255);
+	color_Border_Highlighted = make_color_rgb(255,255,255);
+	
+	color_Background = make_color_rgb(0,0,0);
+	color_Background_Highlighted = make_color_rgb(0,0,0);
+	
+	function setBothColorBorder(_color = make_color_rgb(0,0,0))
+	{
+		color_Border = _color;
+		color_Border_Highlighted = _color;
+	}
+		
+	function setBothColorBackground(_color = make_color_rgb(0,0,0))
+	{
+		color_Background = _color;
+		color_Background_Highlighted = _color;
+	}
+		
+	function setBothAlpha(_alpha = 1)
+	{
+		alpha = _alpha;
+		alpha_highlighted = _alpha;
+	}
+			
+	var function getBorderFactor()
+	{
+		return (window_get_width() < window_get_height() ? window_get_width() : window_get_height()) * scale_border / 2;
+	}
+}
+
+function Rectangle() : Interactives() constructor
 {
 	insets = 0;
 	
@@ -167,7 +171,7 @@ function Rectangle() : GUI_BaseClass() constructor
 	}
 }
 
-function Ellipse() : GUI_BaseClass() constructor
+function Ellipse() : Interactives() constructor
 {
 	isRectangularShape = false;
 	
@@ -201,5 +205,87 @@ function Ellipse() : GUI_BaseClass() constructor
 		
 		scale_width = ratio >= 1 ? _scale_radius / ratio : _scale_radius;
 		scale_height = ratio >= 1 ? _scale_radius : _scale_radius * ratio;
+	}
+}
+
+function Label() : GUI_BaseClass() constructor
+{
+	text = "label";
+	
+	color_Text = make_color_rgb(255,255,255);
+	color_Text_Highlighted = make_color_rgb(255,255,255);
+	
+	font = -1;
+	text_angle = 0;
+	
+	scale_text_width = 1;
+	scale_text_height = 1;
+	
+	horizontal_alignment = fa_center;
+	vertical_alignment = fa_middle;
+	
+	background = new Rectangle();
+	background.setBothAlpha(0);
+	
+	function setBothColorText(_color = make_color_rgb(255,255,255))
+	{
+		color_Text = _color;
+		color_Text_Highlighted = _color;
+	}
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+		
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		var isHighlighted = mouseOver();
+		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);			
+		
+		draw_set_font(font);
+		draw_set_halign(horizontal_alignment);
+		draw_set_valign(vertical_alignment);
+		draw_set_color(!isHighlighted ? color_Text : color_Text_Highlighted);
+
+		display_set_gui_maximise(1, 1);
+		draw_text_transformed(getTextX(gui_width), getTextY(gui_height), text, scale_text_width, scale_text_height, text_angle);
+	}
+	
+	function scaleText(_factor = 1)
+	{
+		scale_text_width = _factor;
+		scale_text_height = _factor;
+	}
+	
+	var function getTextX(gui_width)
+	{
+		var text_x = 0;
+		
+		if (horizontal_alignment == fa_center)
+			text_x = gui_width *scale_x + gui_width *scale_width / 2;
+		else if (horizontal_alignment == fa_left)
+			text_x = gui_width *scale_x;
+		else if (horizontal_alignment == fa_right)
+			text_x = gui_width *scale_x + gui_width *scale_width;
+			
+		return text_x;
+	}
+	
+	var function getTextY(gui_height)
+	{
+		var text_y = 0;
+		
+		if (vertical_alignment == fa_middle)
+			text_y = gui_height *scale_y + gui_height *scale_height / 2;
+		else if (vertical_alignment == fa_top)
+			text_y = gui_height *scale_y;
+		else if (vertical_alignment == fa_bottom)
+			text_y = gui_height *scale_y + gui_height *scale_height;
+			
+		return text_y;
 	}
 }
