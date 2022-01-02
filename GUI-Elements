@@ -18,19 +18,19 @@ function GUI_BaseClass() constructor
 	color_Background = make_color_rgb(0,0,0);
 	color_Background_Highlighted = make_color_rgb(0,0,0);
 	
-	function setBothColorBorder(_color)
+	function setBothColorBorder(_color = make_color_rgb(0,0,0))
 	{
 		color_Border = _color;
 		color_Border_Highlighted = _color;
 	}
 		
-	function setBothColorBackground(_color)
+	function setBothColorBackground(_color = make_color_rgb(0,0,0))
 	{
 		color_Background = _color;
 		color_Background_Highlighted = _color;
 	}
 		
-	function setBothAlpha(_alpha)
+	function setBothAlpha(_alpha = 1)
 	{
 		alpha = _alpha;
 		alpha_highlighted = _alpha;
@@ -136,6 +136,11 @@ function GUI_BaseClass() constructor
 		scale_x += _scale_x;
 		scale_y += _scale_y;
 	}
+	
+	var function getBorderFactor()
+	{
+		return window_get_width() * scale_border / 2;
+	}
 }	
 
 function Rectangle() : GUI_BaseClass() constructor
@@ -154,8 +159,11 @@ function Rectangle() : GUI_BaseClass() constructor
 		draw_set_color(!isHighlighted ? color_Background : color_Background_Highlighted);
 		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, false);
 		
-		draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
-		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, true);
+		for (var i = 0; i <= getBorderFactor(); i++)
+		{
+			draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
+			draw_roundrect_ext(i, i, gui_width - i, gui_height - i, insets, insets, true);
+		}
 	}
 }
 
@@ -174,9 +182,12 @@ function Ellipse() : GUI_BaseClass() constructor
 								
 		draw_set_color(!isHighlighted ? color_Background : color_Background_Highlighted);
 		draw_ellipse(0,0, gui_width, gui_height, false);
-		
-		draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
-		draw_ellipse(0,0, gui_width, gui_height, true);
+				
+		for (var i = 0; i <= getBorderFactor(); i++)
+		{
+			draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
+			draw_ellipse(i, i, gui_width - i, gui_height - i, true);
+		}
 	}
 	
 	function makeCircle(_scale_radius = .25)
