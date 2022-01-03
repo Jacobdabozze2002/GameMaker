@@ -7,16 +7,7 @@ function GUI_BaseClass() constructor
 	
 	parent = undefined;	
 	isRectangularShape = true;
-		
-	alpha = 1;
-	alpha_highlighted = 1;
-	
-	function setBothAlpha(_alpha = 1)
-	{
-		alpha = _alpha;
-		alpha_highlighted = _alpha;
-	}
-	
+			
 	function mouseClicked()
 	{
 		return mouse_check_button(mb_any) && mouseOver();
@@ -134,6 +125,19 @@ function GUI_Advanced() : GUI_BaseClass() constructor
 	color_Background = make_color_rgb(0,0,0);
 	color_Background_Highlighted = make_color_rgb(0,0,0);
 	
+	alpha_Background = 1;
+	alpha_Background_highlighted = 1;
+	alpha_Border = 1;
+	alpha_Border_highlighted = 1;
+	
+	function setBothAlpha(_alpha = 1)
+	{
+		alpha_Background = _alpha;
+		alpha_Background_highlighted = _alpha;
+		alpha_Border = _alpha;
+		alpha_Border_highlighted = _alpha;
+	}
+	
 	function setBothColorBorder(_color = make_color_rgb(0,0,0))
 	{
 		color_Border = _color;
@@ -164,11 +168,12 @@ function Rectangle() : GUI_Advanced() constructor
 		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
 								
 		var isHighlighted = mouseOver();
-		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);	
+		draw_set_alpha(!isHighlighted ? alpha_Background : alpha_Background_highlighted);	
 				
 		draw_set_color(!isHighlighted ? color_Background : color_Background_Highlighted);
 		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, false);
 		
+		draw_set_alpha(!isHighlighted ? alpha_Border : alpha_Border_highlighted);	
 		for (var i = 0; i <= getBorderFactor(); i++)
 		{
 			draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
@@ -188,11 +193,12 @@ function Ellipse() : GUI_Advanced() constructor
 		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
 								
 		var isHighlighted = mouseOver();
-		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);						
+		draw_set_alpha(!isHighlighted ? alpha_Background : alpha_Background_highlighted);							
 								
 		draw_set_color(!isHighlighted ? color_Background : color_Background_Highlighted);
 		draw_ellipse(0,0, gui_width, gui_height, false);
 				
+		draw_set_alpha(!isHighlighted ? alpha_Border : alpha_Border_highlighted);
 		for (var i = 0; i <= getBorderFactor(); i++)
 		{
 			draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
@@ -230,6 +236,14 @@ function Label() : GUI_BaseClass() constructor
 	horizontal_alignment = fa_center;
 	vertical_alignment = fa_middle;
 	
+	alpha = 1;
+	alpha_highlighted = 1;
+	
+	function setBothAlpha(_alpha = 1)
+	{
+		alpha = _alpha;
+		alpha_highlighted = _alpha;
+	}
 	
 	function setBothColorText(_color = make_color_rgb(255,255,255))
 	{
@@ -309,27 +323,178 @@ function Button() : GUI_BaseClass() constructor
 		
 		label.parent = self;
 		label.setCenter(1,1);
+		label.text_angle = 0;
 		label.draw();
 	}
 	
-	function allAlpha(_alpha = 1)
+	function setAllAlpha(_alpha = 1)
 	{
-		background.alpha = 	_alpha;
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
 		label.alpha = _alpha;
 	}
 	
-	function allAlphaHighlighted(_alpha = 1)
+	function setAllAlphaHighlighted(_alpha = 1)
 	{
-		background.alpha_highlighted = 	_alpha;
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
 		label.alpha_highlighted = _alpha;
 	}
 	
-	function allAlphaHighlighted_and_notHighlighted(_alpha = 1)
+	function setAllAlphaHighlighted_and_notHighlighted(_alpha = 1)
 	{
-		background.alpha_highlighted = 	_alpha;
-		background.alpha = 	_alpha;
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
+		label.alpha = _alpha;
+		
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
+		label.alpha_highlighted = _alpha;
+	}
+}
+
+function ProgressBar() : GUI_BaseClass() constructor
+{
+	background = new Rectangle();
+	
+	progressBar = new Rectangle();
+	progressBar.setBothColorBackground(make_color_rgb(0,200,0));
+	
+	progressBarPosition = fa_left;
+	
+	scale_progress = .5;
+	
+	label = new Label();
+	label.text = "0/0";
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+				
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		if (scale_progress > 1)
+			scale_progress = 1;
+		if (scale_progress < 0)
+			scale_progress = 0;
+		
+		progressBar.parent = self;
+		progressBar.setLeftSideCenter(scale_progress,1);
+		
+		if (progressBarPosition == fa_center)
+			progressBar.setCenter(scale_progress,1);
+		if (progressBarPosition == fa_right)
+			progressBar.setRightSideCenter(scale_progress,1);
+		
+		progressBar.draw();
+		
+		label.parent = self;
+		label.setCenter(1,1);
+		label.text_angle = 0;
+		label.draw();
+	}
+	
+	function setAllAlpha(_alpha = 1)
+	{
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
+		progressBar.alpha_Border = _alpha;
+		progressBar.alpha_Background = _alpha;
+		label.alpha = _alpha;
+	}
+	
+	function setAllAlphaHighlighted(_alpha = 1)
+	{
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
+		progressBar.alpha_Border_highlighted = _alpha;
+		progressBar.alpha_Background_highlighted = _alpha;
+		label.alpha_highlighted = _alpha;
+	}
+	
+	function setAllAlphaHighlighted_and_notHighlighted(_alpha = 1)
+	{
+		progressBar.alpha_Border = _alpha;
+		progressBar.alpha_Background = _alpha;
+		progressBar.alpha_Border_highlighted = _alpha;
+		progressBar.alpha_Background_highlighted = _alpha;
+		
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
 		
 		label.alpha = _alpha;
 		label.alpha_highlighted = _alpha;
+	}
+}
+
+function ProgressBar_Vertical() : ProgressBar() constructor
+{
+	progressBarPosition = fa_bottom;
+	label.text_angle = 90;
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+				
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		if (scale_progress > 1)
+			scale_progress = 1;
+		if (scale_progress < 0)
+			scale_progress = 0;
+		
+		progressBar.parent = self;
+		progressBar.setBottomCenter(1,scale_progress);
+		
+		if (progressBarPosition == fa_middle)
+			progressBar.setCenter(1,scale_progress);
+		if (progressBarPosition == fa_top)
+			progressBar.setTopCenter(1,scale_progress);
+		
+		progressBar.draw();
+		
+		label.parent = self;
+		label.setCenter(1,1);
+		
+		if !(label.text_angle == 90 || label.text_angle == 270 || label.text_angle == 0)
+			label.text_angle = 90;
+			
+		setAlignment();	
+		label.draw();
+	}
+	
+	var function setAlignment()
+	{
+		
+		if (label.text_angle == 90)
+		{	
+			if (label.horizontal_alignment == fa_center)
+			{				
+				if (label.vertical_alignment == fa_top)
+				{
+					label.horizontal_alignment = fa_right;
+					label.vertical_alignment = fa_center;
+					label.setTopCenter(0, 0);
+				}
+			
+				if (label.vertical_alignment == fa_bottom)
+				{
+					label.horizontal_alignment = fa_left;
+					label.vertical_alignment = fa_center;
+					label.setBottomCenter(0, 0);
+				}
+			}	
+		}
+		
 	}
 }
