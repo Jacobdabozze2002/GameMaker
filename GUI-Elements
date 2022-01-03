@@ -11,6 +11,17 @@ function GUI_BaseClass() constructor
 	alpha = 1;
 	alpha_highlighted = 1;
 	
+	function setBothAlpha(_alpha = 1)
+	{
+		alpha = _alpha;
+		alpha_highlighted = _alpha;
+	}
+	
+	function mouseClicked()
+	{
+		return mouse_check_button(mb_any) && mouseOver();
+	}
+	
 	function mouseOver()
 	{
 		var gui_width = window_get_width();
@@ -113,7 +124,7 @@ function GUI_BaseClass() constructor
 	}
 }	
 
-function Interactives() : GUI_BaseClass() constructor
+function GUI_Advanced() : GUI_BaseClass() constructor
 {
 	scale_border = .001;
 		
@@ -135,11 +146,6 @@ function Interactives() : GUI_BaseClass() constructor
 		color_Background_Highlighted = _color;
 	}
 		
-	function setBothAlpha(_alpha = 1)
-	{
-		alpha = _alpha;
-		alpha_highlighted = _alpha;
-	}
 			
 	var function getBorderFactor()
 	{
@@ -147,7 +153,7 @@ function Interactives() : GUI_BaseClass() constructor
 	}
 }
 
-function Rectangle() : Interactives() constructor
+function Rectangle() : GUI_Advanced() constructor
 {
 	insets = 0;
 	
@@ -171,7 +177,7 @@ function Rectangle() : Interactives() constructor
 	}
 }
 
-function Ellipse() : Interactives() constructor
+function Ellipse() : GUI_Advanced() constructor
 {
 	isRectangularShape = false;
 	
@@ -224,8 +230,6 @@ function Label() : GUI_BaseClass() constructor
 	horizontal_alignment = fa_center;
 	vertical_alignment = fa_middle;
 	
-	background = new Rectangle();
-	background.setBothAlpha(0);
 	
 	function setBothColorText(_color = make_color_rgb(255,255,255))
 	{
@@ -238,11 +242,7 @@ function Label() : GUI_BaseClass() constructor
 		var gui_width = window_get_width();
 		var gui_height = window_get_height();
 		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
-		
-		background.parent = self;
-		background.setCenter(1,1);
-		background.draw();
-		
+				
 		var isHighlighted = mouseOver();
 		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);			
 		
@@ -287,5 +287,49 @@ function Label() : GUI_BaseClass() constructor
 			text_y = gui_height *scale_y + gui_height *scale_height;
 			
 		return text_y;
+	}
+}
+
+function Button() : GUI_BaseClass() constructor
+{
+	background = new Rectangle();
+	
+	label = new Label();
+	label.text = "button";
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+				
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		label.parent = self;
+		label.setCenter(1,1);
+		label.draw();
+	}
+	
+	function allAlpha(_alpha = 1)
+	{
+		background.alpha = 	_alpha;
+		label.alpha = _alpha;
+	}
+	
+	function allAlphaHighlighted(_alpha = 1)
+	{
+		background.alpha_highlighted = 	_alpha;
+		label.alpha_highlighted = _alpha;
+	}
+	
+	function allAlphaHighlighted_and_notHighlighted(_alpha = 1)
+	{
+		background.alpha_highlighted = 	_alpha;
+		background.alpha = 	_alpha;
+		
+		label.alpha = _alpha;
+		label.alpha_highlighted = _alpha;
 	}
 }
