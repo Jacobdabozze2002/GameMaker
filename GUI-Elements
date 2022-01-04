@@ -468,8 +468,10 @@ function ProgressBar_Vertical() : ProgressBar() constructor
 		
 		if !(label.text_angle == 90 || label.text_angle == 270 || label.text_angle == 0)
 			label.text_angle = 90;
-			
-		setAlignment();	
+		
+		if (label.text_angle != 0)
+			setAlignment();	
+		
 		label.draw();
 	}
 	
@@ -483,8 +485,9 @@ function ProgressBar_Vertical() : ProgressBar() constructor
 				if (label.vertical_alignment == fa_top)
 				{
 					label.horizontal_alignment = fa_right;
-					label.vertical_alignment = fa_center;
+					label.vertical_alignment = fa_middle;
 					label.setTopCenter(0, 0);
+					return;
 				}
 			
 				if (label.vertical_alignment == fa_bottom)
@@ -492,9 +495,139 @@ function ProgressBar_Vertical() : ProgressBar() constructor
 					label.horizontal_alignment = fa_left;
 					label.vertical_alignment = fa_center;
 					label.setBottomCenter(0, 0);
+					return;
+				}
+			}	
+			
+			if (label.horizontal_alignment == fa_left)
+			{				
+				if (label.vertical_alignment == fa_middle)
+				{
+					label.horizontal_alignment = fa_center;
+					label.vertical_alignment = fa_top;
+					label.setBottomLeft(0, .5);
+					return;
+				}
+				
+				if (label.vertical_alignment == fa_top)
+				{
+					label.horizontal_alignment = fa_right;
+					label.vertical_alignment = fa_left;
+					label.setTopLeft(0, 0);
+					return;
+				}
+
+				if (label.vertical_alignment == fa_bottom)
+				{
+					label.horizontal_alignment = fa_left;
+					label.vertical_alignment = fa_left;
+					label.setBottomLeft(0, 0);
+					return;
+				}
+			}	
+			
+			if (label.horizontal_alignment == fa_right)
+			{				
+				if (label.vertical_alignment == fa_middle)
+				{
+					label.horizontal_alignment = fa_center;
+					label.vertical_alignment = fa_top;
+					label.setBottomRight(.5, .5);
+					return;
+				}
+				
+				if (label.vertical_alignment == fa_top)
+				{
+					label.horizontal_alignment = fa_right;
+					label.vertical_alignment = fa_bottom;
+					label.setTopRight(1,0);
+					return;
+				}
+
+				if (label.vertical_alignment == fa_bottom)
+				{
+					label.horizontal_alignment = fa_top;
+					label.vertical_alignment = fa_right;
+					label.setBottomRight(0, 0);
+					return;
 				}
 			}	
 		}
 		
+		if (label.text_angle == 270)
+		{	
+			if (label.horizontal_alignment == fa_center)
+			{				
+				if (label.vertical_alignment == fa_top)
+				{
+					label.horizontal_alignment = fa_left;
+					label.vertical_alignment = fa_middle;
+					label.setTopCenter(0, 0);
+					return;
+				}
+			
+				if (label.vertical_alignment == fa_bottom)
+				{
+					label.horizontal_alignment = fa_right;
+					label.vertical_alignment = fa_center;
+					label.setBottomCenter(0, 0);
+					return;
+				}
+			}	
+			
+			if (label.horizontal_alignment == fa_left)
+			{				
+				if (label.vertical_alignment == fa_middle)
+				{
+					label.horizontal_alignment = fa_center;
+					label.vertical_alignment = fa_bottom;
+					label.setLeftSideCenter(0, 0);
+					return;
+				}
+				
+				if (label.vertical_alignment == fa_top)
+				{
+					label.horizontal_alignment = fa_left;
+					label.vertical_alignment = fa_right;
+					label.setTopLeft(0, 0);
+					return;
+				}
+
+				if (label.vertical_alignment == fa_bottom)
+				{
+					label.horizontal_alignment = fa_right;
+					label.vertical_alignment = fa_right;
+					label.setBottomLeft(0, 0);
+					return;
+				}
+			}	
+			
+			if (label.horizontal_alignment == fa_right)
+			{				
+				if (label.vertical_alignment == fa_middle)
+				{
+					label.horizontal_alignment = fa_center;
+					label.vertical_alignment = fa_top;
+					label.setRightSideCenter(0, 0);
+					return;
+				}
+				
+				if (label.vertical_alignment == fa_top)
+				{
+					label.horizontal_alignment = fa_left;
+					label.vertical_alignment = fa_top;
+					label.setTopRight(0,0);
+					return;
+				}
+
+				if (label.vertical_alignment == fa_bottom)
+				{
+					label.horizontal_alignment = fa_bottom;
+					label.vertical_alignment = fa_left;
+					label.setBottomRight(0, 0);
+					return;
+				}
+			}	
+		}
 	}
 }
