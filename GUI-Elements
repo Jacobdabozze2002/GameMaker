@@ -172,7 +172,7 @@ function GUI_Advanced() : GUI_BaseClass() constructor
 
 function Rectangle() : GUI_Advanced() constructor
 {
-	insets = 0;
+	scale_insets = 0;
 	
 	function draw()
 	{
@@ -183,6 +183,7 @@ function Rectangle() : GUI_Advanced() constructor
 		var isHighlighted = mouseOver();
 		draw_set_alpha(!isHighlighted ? alpha_Background : alpha_Background_highlighted);	
 				
+		var insets = gui_width > gui_height ? gui_width * scale_insets : gui_height * scale_insets;		
 		draw_set_color(!isHighlighted ? color_Background : color_Background_Highlighted);
 		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, false);
 		
@@ -372,6 +373,7 @@ function ProgressBar() : GUI_BaseClass() constructor
 	
 	progressBar = new Rectangle();
 	progressBar.setBothColorBackground(make_color_rgb(0,200,0));
+	progressBar.setBothAlphaBorder(0);
 		
 	progressBarPosition = fa_left;
 	
@@ -417,6 +419,13 @@ function ProgressBar() : GUI_BaseClass() constructor
 		borderLayer.alpha_Background = 0;
 		borderLayer.alpha_Background_highlighted = 0;
 		borderLayer.draw();
+	}
+	
+	function setAll_Scale_Insets(_scale)
+	{
+		background.scale_insets = _scale;
+		progressBar.scale_insets = _scale;
+		borderLayer.scale_insets = _scale;
 	}
 	
 	function setAllAlpha(_alpha = 1)
