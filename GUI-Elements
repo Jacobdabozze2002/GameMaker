@@ -7,10 +7,11 @@ function GUI_BaseClass() constructor
 	
 	parent = undefined;	
 	isRectangularShape = true;
-			
+	
+
 	function mouseClicked()
 	{
-		return mouse_check_button(mb_any) && mouseOver();
+		return mouse_check_button_released(mb_any) && mouseOver();
 	}
 	
 	function mouseOver()
