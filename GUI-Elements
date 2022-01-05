@@ -131,6 +131,18 @@ function GUI_Advanced() : GUI_BaseClass() constructor
 	alpha_Border = 1;
 	alpha_Border_highlighted = 1;
 	
+	function setBothAlphaBorder(_alpha = 1)
+	{
+		alpha_Border = _alpha;
+		alpha_Border_highlighted = _alpha;
+	}
+	
+	function setBothAlphaBackground(_alpha = 1)
+	{
+		alpha_Background = _alpha;
+		alpha_Background_highlighted = _alpha;
+	}
+	
 	function setBothAlpha(_alpha = 1)
 	{
 		alpha_Background = _alpha;
@@ -360,13 +372,15 @@ function ProgressBar() : GUI_BaseClass() constructor
 	
 	progressBar = new Rectangle();
 	progressBar.setBothColorBackground(make_color_rgb(0,200,0));
-	
+		
 	progressBarPosition = fa_left;
 	
 	scale_progress = .5;
 	
 	label = new Label();
 	label.text = "0/0";
+	
+	borderLayer = new Rectangle();
 	
 	function draw()
 	{
@@ -397,6 +411,12 @@ function ProgressBar() : GUI_BaseClass() constructor
 		label.setCenter(1,1);
 		label.text_angle = 0;
 		label.draw();
+		
+		borderLayer.parent = self;
+		borderLayer.setCenter(1,1);
+		borderLayer.alpha_Background = 0;
+		borderLayer.alpha_Background_highlighted = 0;
+		borderLayer.draw();
 	}
 	
 	function setAllAlpha(_alpha = 1)
@@ -405,6 +425,8 @@ function ProgressBar() : GUI_BaseClass() constructor
 		background.alpha_Background = _alpha;
 		progressBar.alpha_Border = _alpha;
 		progressBar.alpha_Background = _alpha;
+		borderLayer.alpha_Border = _alpha;
+		borderLayer.alpha_Background = _alpha;
 		label.alpha = _alpha;
 	}
 	
@@ -414,6 +436,8 @@ function ProgressBar() : GUI_BaseClass() constructor
 		background.alpha_Background_highlighted = _alpha;
 		progressBar.alpha_Border_highlighted = _alpha;
 		progressBar.alpha_Background_highlighted = _alpha;
+		borderLayer.alpha_Border_highlighted = _alpha;
+		borderLayer.alpha_Background_highlighted = _alpha;
 		label.alpha_highlighted = _alpha;
 	}
 	
@@ -428,6 +452,11 @@ function ProgressBar() : GUI_BaseClass() constructor
 		background.alpha_Background = _alpha;
 		background.alpha_Border_highlighted = _alpha;
 		background.alpha_Background_highlighted = _alpha;
+		
+		borderLayer.alpha_Border = _alpha;
+		borderLayer.alpha_Background = _alpha;
+		borderLayer.alpha_Border_highlighted = _alpha;
+		borderLayer.alpha_Background_highlighted = _alpha;
 		
 		label.alpha = _alpha;
 		label.alpha_highlighted = _alpha;
@@ -474,6 +503,12 @@ function ProgressBar_Vertical() : ProgressBar() constructor
 			setAlignment();	
 		
 		label.draw();
+		
+		borderLayer.parent = self;
+		borderLayer.setCenter(1,1);
+		borderLayer.alpha_Background = 0;
+		borderLayer.alpha_Background_highlighted = 0;
+		borderLayer.draw();
 	}
 	
 	var function setAlignment()
