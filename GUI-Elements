@@ -111,8 +111,8 @@ function GUI_BaseClass() constructor
 	
 	function move(_scale_x = 0, _scale_y = 0)
 	{
-		scale_x += _scale_x;
-		scale_y += _scale_y;
+		scale_x += is_undefined(parent) ? _scale_x : _scale_x * parent.scale_width;
+		scale_y += is_undefined(parent) ? _scale_y : _scale_y * parent.scale_height;
 	}
 }	
 
@@ -188,7 +188,7 @@ function Rectangle() : GUI_Advanced() constructor
 		draw_roundrect_ext(0,0, gui_width, gui_height, insets, insets, false);
 		
 		draw_set_alpha(!isHighlighted ? alpha_Border : alpha_Border_highlighted);	
-		for (var i = 0; i <= getBorderFactor(); i++)
+		for (var i = 0; i <= getBorderFactor(); i += .75)
 		{
 			draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
 			draw_roundrect_ext(i, i, gui_width - i, gui_height - i, insets, insets, true);
@@ -213,7 +213,7 @@ function Ellipse() : GUI_Advanced() constructor
 		draw_ellipse(0,0, gui_width, gui_height, false);
 				
 		draw_set_alpha(!isHighlighted ? alpha_Border : alpha_Border_highlighted);
-		for (var i = 0; i <= getBorderFactor(); i++)
+		for (var i = 0; i <= getBorderFactor(); i += .75)
 		{
 			draw_set_color(!isHighlighted ? color_Border : color_Border_Highlighted);
 			draw_ellipse(i, i, gui_width - i, gui_height - i, true);
@@ -806,3 +806,4 @@ function Sprite_Rectangle() : GUI_BaseClass() constructor
 		sprite.alpha_highlighted = _alpha;
 	}
 }
+
