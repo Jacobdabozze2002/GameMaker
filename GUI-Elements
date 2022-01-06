@@ -676,3 +676,133 @@ function ProgressBar_Vertical() : ProgressBar() constructor
 		}
 	}
 }
+
+function Sprite() : GUI_BaseClass() constructor
+{
+	sprite = -1;
+	
+	alpha = 1;
+	alpha_highlighted = 1;
+	
+	function setBothAlpha(_alpha = 1)
+	{
+		alpha = _alpha;
+		alpha_highlighted = _alpha;
+	}
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+				
+		var isHighlighted = mouseOver();
+		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);			
+		
+		draw_sprite_stretched(sprite, -1, 0, 0, gui_width, gui_height);
+	}
+}
+
+function Sprite_Rectangle() : GUI_BaseClass() constructor
+{
+	background = new Rectangle();
+	
+	sprite = new Sprite();
+	sprite.scale_width = 1;
+	sprite.scale_height = 1;
+	
+	sprite_horizontal_alignment = fa_center;
+	sprite_vertical_alignment = fa_middle;
+	
+	borderLayer = new Rectangle();
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+				
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();		
+				
+		sprite.parent = self;
+		setSpritePosition();
+		sprite.draw();		
+		
+		borderLayer.parent = self;
+		borderLayer.setCenter(1,1);
+		borderLayer.setBothAlphaBackground(0);
+		borderLayer.draw();
+	}
+
+	var function setSpritePosition()
+	{
+		if (sprite_horizontal_alignment == fa_left && sprite_vertical_alignment == fa_top)
+			sprite.setTopLeft();
+			
+		if (sprite_horizontal_alignment == fa_left && sprite_vertical_alignment == fa_middle)
+			sprite.setLeftSideCenter();
+			
+		if (sprite_horizontal_alignment == fa_left && sprite_vertical_alignment == fa_bottom)
+			sprite.setBottomLeft();			
+			
+		if (sprite_horizontal_alignment == fa_center && sprite_vertical_alignment == fa_top)
+			sprite.setTopCenter();
+			
+		if (sprite_horizontal_alignment == fa_center && sprite_vertical_alignment == fa_middle)
+			sprite.setCenter();
+			
+		if (sprite_horizontal_alignment == fa_center && sprite_vertical_alignment == fa_bottom)
+			sprite.setBottomCenter();
+			
+		if (sprite_horizontal_alignment == fa_right && sprite_vertical_alignment == fa_top)
+			sprite.setTopRight();
+			
+		if (sprite_horizontal_alignment == fa_right && sprite_vertical_alignment == fa_middle)
+			sprite.setRightSideCenter();
+			
+		if (sprite_horizontal_alignment == fa_right && sprite_vertical_alignment == fa_bottom)
+			sprite.setBottomRight();
+	}
+
+	function setAll_Scale_Insets(_scale)
+	{
+		background.scale_insets = _scale;
+		borderLayer.scale_insets = _scale;
+	}
+	
+	function setAllAlpha(_alpha = 1)
+	{
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
+		borderLayer.alpha_Border = _alpha;
+		borderLayer.alpha_Background = _alpha;
+		sprite.alpha = _alpha;
+	}
+	
+	function setAllAlphaHighlighted(_alpha = 1)
+	{
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
+		borderLayer.alpha_Border_highlighted = _alpha;
+		borderLayer.alpha_Background_highlighted = _alpha;
+		sprite.alpha_highlighted = _alpha;
+	}
+	
+	function setAllAlphaHighlighted_and_notHighlighted(_alpha = 1)
+	{
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
+		
+		borderLayer.alpha_Border = _alpha;
+		borderLayer.alpha_Background = _alpha;
+		borderLayer.alpha_Border_highlighted = _alpha;
+		borderLayer.alpha_Background_highlighted = _alpha;
+		
+		sprite.alpha = _alpha;
+		sprite.alpha_highlighted = _alpha;
+	}
+}
