@@ -8,6 +8,10 @@ function GUI_BaseClass() constructor
 	parent = undefined;	
 	isRectangularShape = true;
 	
+	function mousePressed()
+	{
+		return mouse_check_button(mb_any) && mouseOver();	
+	}
 
 	function mouseClicked()
 	{
@@ -278,7 +282,7 @@ function Label() : GUI_BaseClass() constructor
 		draw_set_halign(horizontal_alignment);
 		draw_set_valign(vertical_alignment);
 		draw_set_color(!isHighlighted ? color_Text : color_Text_Highlighted);
-
+		
 		display_set_gui_size(surface_get_width(application_surface), surface_get_height(application_surface));
 		draw_text_transformed(getTextX(surface_get_width(application_surface)), getTextY(surface_get_height(application_surface)), text, scale_text_width, scale_text_height, text_angle);
 	}
@@ -699,7 +703,7 @@ function Sprite() : GUI_BaseClass() constructor
 		var isHighlighted = mouseOver();
 		draw_set_alpha(!isHighlighted ? alpha : alpha_highlighted);			
 		
-		draw_sprite_stretched(sprite, -1, 0, 0, gui_width, gui_height);
+		draw_sprite_stretched(sprite, 0, 0, 0, gui_width, gui_height);
 	}
 }
 
@@ -708,8 +712,8 @@ function Sprite_Rectangle() : GUI_BaseClass() constructor
 	background = new Rectangle();
 	
 	sprite = new Sprite();
-	sprite.scale_width = 1;
-	sprite.scale_height = 1;
+	sprite_scale_width = 1;
+	sprite_scale_height = 1;
 	
 	sprite_horizontal_alignment = fa_center;
 	sprite_vertical_alignment = fa_middle;
@@ -724,6 +728,7 @@ function Sprite_Rectangle() : GUI_BaseClass() constructor
 				
 		background.parent = self;
 		background.setCenter(1,1);
+		background.setBothAlphaBorder(0);
 		background.draw();		
 				
 		sprite.parent = self;
@@ -739,31 +744,31 @@ function Sprite_Rectangle() : GUI_BaseClass() constructor
 	var function setSpritePosition()
 	{
 		if (sprite_horizontal_alignment == fa_left && sprite_vertical_alignment == fa_top)
-			sprite.setTopLeft();
+			sprite.setTopLeft(sprite_scale_width, sprite_scale_height);
 			
 		if (sprite_horizontal_alignment == fa_left && sprite_vertical_alignment == fa_middle)
-			sprite.setLeftSideCenter();
+			sprite.setLeftSideCenter(sprite_scale_width, sprite_scale_height);
 			
 		if (sprite_horizontal_alignment == fa_left && sprite_vertical_alignment == fa_bottom)
-			sprite.setBottomLeft();			
+			sprite.setBottomLeft(sprite_scale_width, sprite_scale_height);			
 			
 		if (sprite_horizontal_alignment == fa_center && sprite_vertical_alignment == fa_top)
-			sprite.setTopCenter();
+			sprite.setTopCenter(sprite_scale_width, sprite_scale_height);
 			
 		if (sprite_horizontal_alignment == fa_center && sprite_vertical_alignment == fa_middle)
-			sprite.setCenter();
+			sprite.setCenter(sprite_scale_width, sprite_scale_height);
 			
 		if (sprite_horizontal_alignment == fa_center && sprite_vertical_alignment == fa_bottom)
-			sprite.setBottomCenter();
+			sprite.setBottomCenter(sprite_scale_width, sprite_scale_height);
 			
 		if (sprite_horizontal_alignment == fa_right && sprite_vertical_alignment == fa_top)
-			sprite.setTopRight();
+			sprite.setTopRight(sprite_scale_width, sprite_scale_height);
 			
 		if (sprite_horizontal_alignment == fa_right && sprite_vertical_alignment == fa_middle)
-			sprite.setRightSideCenter();
+			sprite.setRightSideCenter(sprite_scale_width, sprite_scale_height);
 			
 		if (sprite_horizontal_alignment == fa_right && sprite_vertical_alignment == fa_bottom)
-			sprite.setBottomRight();
+			sprite.setBottomRight(sprite_scale_width, sprite_scale_height);
 	}
 
 	function setAll_Scale_Insets(_scale)
@@ -804,6 +809,34 @@ function Sprite_Rectangle() : GUI_BaseClass() constructor
 		
 		sprite.alpha = _alpha;
 		sprite.alpha_highlighted = _alpha;
+	}
+}
+
+function Password_Field() : Button() constructor
+{
+	secretSymbol = "#";
+	privateText = "Password_123";
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+				
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		var publicText = "";
+		
+		for (var i = 0; i < string_length(privateText); i++)
+			publicText += secretSymbol;
+		
+		label.parent = self;
+		label.setCenter(1,1);
+		label.text = publicText;
+		label.text_angle = 0;
+		label.draw();
 	}
 }
 
