@@ -840,3 +840,138 @@ function Password_Field() : Button() constructor
 	}
 }
 
+function Slider() : GUI_BaseClass() constructor
+{
+	background = new Rectangle();
+	
+	
+	slider_scale_width = .25;
+	slider_scale_height = 1;
+	slider_scale_value = .5;
+	
+	slider = new Rectangle();
+	slider.setBothColorBackground(make_color_rgb(200,200,200));
+	
+	borderLayer = new Rectangle();
+	
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+		
+
+		if (self.mousePressed())
+			slider_scale_value = (window_mouse_get_x() / gui_width - self.scale_x) *2;
+						
+		
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		slider.parent = background;
+		slider.setLeftSideCenter(slider_scale_width, slider_scale_height);
+		slider.move(slider_scale_value - slider.scale_width);
+		
+		if (slider.scale_x < self.scale_x)
+			slider.setLeftSideCenter(slider_scale_width, slider_scale_height);
+			
+		if (slider.scale_x + slider.scale_width > self.scale_x + self.scale_width)
+			slider.setRightSideCenter(slider_scale_width, slider_scale_height);
+			
+		slider.draw();
+		
+		
+		borderLayer.parent = self;
+		borderLayer.setCenter(1,1);
+		borderLayer.setBothAlphaBackground(0);
+		borderLayer.draw();
+	}
+	
+	function setAll_Scale_Insets(_scale)
+	{
+		background.scale_insets = _scale;
+		slider.scale_insets = _scale;
+		borderLayer.scale_insets = _scale;
+	}
+	
+	function setAllAlpha(_alpha = 1)
+	{
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
+		slider.alpha_Border = _alpha;
+		slider.alpha_Background = _alpha;
+		borderLayer.alpha_Border = _alpha;
+		borderLayer.alpha_Background = _alpha;
+	}
+	
+	function setAllAlphaHighlighted(_alpha = 1)
+	{
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
+		slider.alpha_Border_highlighted = _alpha;
+		slider.alpha_Background_highlighted = _alpha;
+		borderLayer.alpha_Border_highlighted = _alpha;
+		borderLayer.alpha_Background_highlighted = _alpha;
+	}
+	
+	function setAllAlphaHighlighted_and_notHighlighted(_alpha = 1)
+	{
+		slider.alpha_Border = _alpha;
+		slider.alpha_Background = _alpha;
+		slider.alpha_Border_highlighted = _alpha;
+		slider.alpha_Background_highlighted = _alpha;
+		
+		background.alpha_Border = _alpha;
+		background.alpha_Background = _alpha;
+		background.alpha_Border_highlighted = _alpha;
+		background.alpha_Background_highlighted = _alpha;
+		
+		borderLayer.alpha_Border = _alpha;
+		borderLayer.alpha_Background = _alpha;
+		borderLayer.alpha_Border_highlighted = _alpha;
+		borderLayer.alpha_Background_highlighted = _alpha;
+	}
+}
+
+function Slider_Vertical() : Slider() constructor
+{
+	slider_scale_width = 1;
+	slider_scale_height = .25;
+	slider_scale_value = .5;
+		
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+		
+
+		if (self.mousePressed())
+			slider_scale_value = (window_mouse_get_y() / gui_height - self.scale_y) *2;
+						
+		
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		slider.parent = background;
+		slider.setTopCenter(slider_scale_width, slider_scale_height);
+		slider.move(, slider_scale_value - slider.scale_height);
+		
+		if (slider.scale_y < self.scale_y)
+			slider.setTopCenter(slider_scale_width, slider_scale_height);
+			
+		if (slider.scale_y + slider.scale_height > self.scale_y + self.scale_height)
+			slider.setBottomCenter(slider_scale_width, slider_scale_height);
+			
+		slider.draw();
+		
+		
+		borderLayer.parent = self;
+		borderLayer.setCenter(1,1);
+		borderLayer.setBothAlphaBackground(0);
+		borderLayer.draw();
+	}
+}
