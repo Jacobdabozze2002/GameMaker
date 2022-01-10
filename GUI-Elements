@@ -863,7 +863,7 @@ function Slider() : GUI_BaseClass() constructor
 		
 
 		if (self.mousePressed())
-			slider_scale_value = (window_mouse_get_x() / gui_width - self.scale_x) *2;
+			slider_scale_value = (window_mouse_get_x() / gui_width - self.scale_x) * (1 / self.scale_width);
 						
 		
 		background.parent = self;
@@ -872,7 +872,7 @@ function Slider() : GUI_BaseClass() constructor
 		
 		slider.parent = background;
 		slider.setLeftSideCenter(slider_scale_width, slider_scale_height);
-		slider.move(slider_scale_value - slider.scale_width);
+		slider.move(slider_scale_value - slider_scale_width / 2);
 		
 		if (slider.scale_x < self.scale_x)
 			slider.setLeftSideCenter(slider_scale_width, slider_scale_height);
@@ -949,7 +949,7 @@ function Slider_Vertical() : Slider() constructor
 		
 
 		if (self.mousePressed())
-			slider_scale_value = (window_mouse_get_y() / gui_height - self.scale_y) *2;
+			slider_scale_value = (window_mouse_get_y() / gui_height - self.scale_y) * (1 / self.scale_height);
 						
 		
 		background.parent = self;
@@ -958,7 +958,7 @@ function Slider_Vertical() : Slider() constructor
 		
 		slider.parent = background;
 		slider.setTopCenter(slider_scale_width, slider_scale_height);
-		slider.move(, slider_scale_value - slider.scale_height);
+		slider.move(, slider_scale_value - slider_scale_height / 2);
 		
 		if (slider.scale_y < self.scale_y)
 			slider.setTopCenter(slider_scale_width, slider_scale_height);
@@ -975,3 +975,42 @@ function Slider_Vertical() : Slider() constructor
 		borderLayer.draw();
 	}
 }
+
+function ListBox() : GUI_BaseClass() constructor
+{
+	enableSlider = true;
+	enableTouch = true;
+	
+	numberOfElements = 5;
+	
+	background = new Rectangle();
+	
+	slider = new Slider_Vertical();
+	
+	function draw()
+	{
+		var gui_width = window_get_width();
+		var gui_height = window_get_height();
+		display_set_gui_maximise(scale_width, scale_height, gui_width *scale_x, gui_height *scale_y);
+		
+		
+		background.parent = self;
+		background.setCenter(1,1);
+		background.draw();
+		
+		for (var i = 0; i < numberOfElements; ++i)
+		{
+			var element = new Button();
+			element.parent = background;
+			element.setTopLeft(1, 1 / numberOfElements);
+			element.move(0, i * (1 / numberOfElements));
+			element.label.text = "element: " + string(i);
+			element.draw();
+		}
+		
+		slider.parent = background;
+		slider.setRightSideCenter(.05, 1);
+		slider.draw();
+	}
+}
+
