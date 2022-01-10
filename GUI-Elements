@@ -981,11 +981,24 @@ function ListBox() : GUI_BaseClass() constructor
 	enableSlider = true;
 	enableTouch = true;
 	
-	numberOfElements = 5;
-	
 	background = new Rectangle();
 	
 	slider = new Slider_Vertical();
+	sliderBounds_width = .05;
+	sliderBounds_height = 1;
+	slider.slider_scale_value = 0;
+	
+	selectedIndex = 0;
+	
+	numberOfElementsPerPage = 5;
+	elementsFont = -1;
+	elementsData = [];
+	pageElements = [];
+	
+	for (var i = 0; i < numberOfElementsPerPage + 2; ++i)	
+		pageElements[i] = new Button();
+	
+	
 	
 	function draw()
 	{
@@ -998,19 +1011,32 @@ function ListBox() : GUI_BaseClass() constructor
 		background.setCenter(1,1);
 		background.draw();
 		
-		for (var i = 0; i < numberOfElements; ++i)
-		{
-			var element = new Button();
-			element.parent = background;
-			element.setTopLeft(1, 1 / numberOfElements);
-			element.move(0, i * (1 / numberOfElements));
-			element.label.text = "element: " + string(i);
-			element.draw();
-		}
 		
+		var topIndex = floor((array_length(elementsData) - numberOfElementsPerPage + 1) *slider.slider_scale_value);	
+		
+		for (var i = -1; i < numberOfElementsPerPage + 1; ++i)
+		{					
+			var currentIndex = topIndex + i;
+			
+			pageElements[i+1].parent = background;
+			pageElements[i+1].setTopLeft(!enableSlider ? 1 : 1 - slider.scale_width, 1 / numberOfElementsPerPage);
+			pageElements[i+1].move(0, i * (1 / numberOfElementsPerPage));
+			pageElements[i+1].label.font = elementsFont;
+			pageElements[i+1].label.text = currentIndex < array_length(elementsData) && currentIndex > -1 ? elementsData[currentIndex] : "";
+			pageElements[i+1].draw();
+			
+			if (pageElements[i+1].mouseClicked())
+				selectedIndex = currentIndex;
+		}	
+			
+				
 		slider.parent = background;
-		slider.setRightSideCenter(.05, 1);
-		slider.draw();
+		slider.setRightSideCenter(sliderBounds_width, sliderBounds_height);
+		if (enableSlider)
+			slider.draw();
+			
+			
 	}
+
 }
 
