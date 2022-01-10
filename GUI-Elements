@@ -990,14 +990,13 @@ function ListBox() : GUI_BaseClass() constructor
 	
 	selectedIndex = 0;
 	
-	numberOfElementsPerPage = 8;
+	numberOfElementsPerPage = 5;
 	elementsFont = -1;
 	elementsData = [];
 	pageElements = [];
 	
 	for (var i = 0; i < numberOfElementsPerPage + 1; ++i)	
 		pageElements[i] = new Button();
-	
 	
 	
 	function draw()
@@ -1018,7 +1017,7 @@ function ListBox() : GUI_BaseClass() constructor
 			var currentIndex = floor(topIndex) + i;
 			var move_y = -(topIndex - floor(topIndex)) / numberOfElementsPerPage;
 			
-				
+						
 			pageElements[i].parent = background;
 			pageElements[i].setTopLeft(!enableSlider ? 1 : 1 - sliderSize_width, 1 / numberOfElementsPerPage);
 			pageElements[i].move(0, i * (1 / numberOfElementsPerPage) + move_y);
@@ -1027,13 +1026,27 @@ function ListBox() : GUI_BaseClass() constructor
 			{
 				pageElements[i].scale_height = pageElements[i+1].scale_y - self.scale_y;
 				pageElements[i].scale_y = self.scale_y;
+				pageElements[i].label.setBothAlpha((pageElements[i].scale_height / self.scale_height) /  (1 / (numberOfElementsPerPage)));
+				pageElements[i].label.scaleText((pageElements[i].scale_height / self.scale_height) /  (1 / (numberOfElementsPerPage)));
 			} 
 			else if (i == numberOfElementsPerPage)
 			{
 				pageElements[i].scale_height = (self.scale_y + self.scale_height) - (pageElements[i - 1].scale_y + pageElements[i - 1].scale_height);
 				pageElements[i].scale_y = pageElements[i - 1].scale_y + pageElements[i - 1].scale_height;
+				pageElements[i].label.setBothAlpha((pageElements[i].scale_height / self.scale_height) /  (1 / (numberOfElementsPerPage)));
+				pageElements[i].label.scaleText((pageElements[i].scale_height / self.scale_height) /  (1 / (numberOfElementsPerPage)));
 			}
-
+			
+			
+			if (self.mouseClicked())
+			{
+				if (pageElements[0].scale_height > pageElements[numberOfElementsPerPage].scale_height)	
+					slider.slider_scale_value =  floor(topIndex) / (array_length(elementsData) - numberOfElementsPerPage);
+				//else
+					//slider.slider_scale_value =  floor(topIndex) / (array_length(elementsData) - numberOfElementsPerPage);
+				
+			
+			}
 			
 			pageElements[i].label.font = elementsFont;
 			pageElements[i].label.text = currentIndex < array_length(elementsData) ? elementsData[currentIndex] : "";
@@ -1048,8 +1061,6 @@ function ListBox() : GUI_BaseClass() constructor
 		slider.setRightSideCenter(sliderSize_width, sliderSize_height);
 		if (enableSlider)
 			slider.draw();
-			
-			
 	}
 }
 
