@@ -979,8 +979,7 @@ function Slider_Vertical() : Slider() constructor
 function ListBox() : GUI_BaseClass() constructor
 {
 	enableSlider = true;
-	enableTouch = true;
-	
+		
 	background = new Rectangle();
 	
 	slider = new Slider_Vertical();
@@ -1013,7 +1012,7 @@ function ListBox() : GUI_BaseClass() constructor
 		
 		for (var i = 0; i < numberOfElementsPerPage + 1; ++i)
 		{		
-			var topIndex = array_length(elementsData) >= numberOfElementsPerPage ? (array_length(elementsData) - numberOfElementsPerPage) *slider.slider_scale_value : 0;		
+			var topIndex = array_length(elementsData) >= numberOfElementsPerPage ? (array_length(elementsData) - numberOfElementsPerPage) *slider.slider_scale_value : 0;			
 			var currentIndex = floor(topIndex) + i;
 			var move_y = -(topIndex - floor(topIndex)) / numberOfElementsPerPage;
 			
@@ -1037,25 +1036,36 @@ function ListBox() : GUI_BaseClass() constructor
 				pageElements[i].label.scaleText((pageElements[i].scale_height / self.scale_height) /  (1 / (numberOfElementsPerPage)));
 			}
 			
-			
-			if (self.mouseClicked())
-			{
-				if (pageElements[0].scale_height > pageElements[numberOfElementsPerPage].scale_height)	
-					slider.slider_scale_value =  floor(topIndex) / (array_length(elementsData) - numberOfElementsPerPage);
-				//else
-					//slider.slider_scale_value =  floor(topIndex) / (array_length(elementsData) - numberOfElementsPerPage);
-				
-			
-			}
-			
+			/// auto correction
 			pageElements[i].label.font = elementsFont;
 			pageElements[i].label.text = currentIndex < array_length(elementsData) ? elementsData[currentIndex] : "";
 			pageElements[i].draw();
 			
 			if (pageElements[i].mouseClicked())
+			{
 				selectedIndex = currentIndex;
-		}	
 			
+				if (pageElements[0].mouseClicked())
+					slider.slider_scale_value =  floor(topIndex) / (array_length(elementsData) - numberOfElementsPerPage)
+				
+				else if (pageElements[numberOfElementsPerPage].mouseClicked())
+				{
+					slider.slider_scale_value = (floor(topIndex) + 1) / (array_length(elementsData) - numberOfElementsPerPage);
+					selectedIndex = floor(topIndex) + numberOfElementsPerPage;
+					break;
+				}
+				
+				else if (pageElements[0].scale_height > pageElements[numberOfElementsPerPage].scale_height)	
+					slider.slider_scale_value =  floor(topIndex) / (array_length(elementsData) - numberOfElementsPerPage);
+				else
+				{	
+					slider.slider_scale_value = (floor(topIndex) + 1) / (array_length(elementsData) - numberOfElementsPerPage);
+					break;
+				}	
+			}
+			
+		}	
+		
 				
 		slider.parent = background;
 		slider.setRightSideCenter(sliderSize_width, sliderSize_height);
